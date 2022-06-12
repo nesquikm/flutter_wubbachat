@@ -31,6 +31,16 @@ $ flutter run --flavor staging --target lib/main_staging.dart
 $ flutter run --flavor production --target lib/main_production.dart
 ```
 
+To generate code using json_serializable:
+```sh
+$ flutter packages pub run build_runner build
+```
+
+To generate l10n:
+```sh
+$ flutter gen-l10n
+```
+
 _\*Flutter Wubbachat works on iOS, Android, Web, and Windows._
 
 ---
