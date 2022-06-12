@@ -1,0 +1,83 @@
+{
+  "@@locale": "en",
+  "navBarChats": "Chats",
+  "@navBarChats": {
+    "description": "Text shown in bottom navigation bar item for chat screen"
+  },
+  "navBarSettings": "Settings",
+  "@navBarSettings": {
+    "description": "Text shown in bottom navigation bar item for settings screen"
+  },
+  "appBarChats": "Chats",
+  "@appBarChats": {
+    "description": "Text shown in app bar for chat screen"
+  },
+  "appBarSettings": "Settings",
+  "@appBarSettings": {
+    "description": "Text shown in app bar for settings screen"
+  },
+  "unsubscribedFrom": "Unsubscribed from {chatName}",
+  "@unsubscribedFrom": {
+    "description": "Snackbar message shown when user is unsubscribed from a chat",
+    "placeholders": {
+      "chatName": {
+        "type": "String",
+        "example": "Los Angeles (clear)"
+      }
+    }
+  },
+  "unsubscribedFromUndo": "Undo",
+  "@unsubscribedFromUndo": {
+    "description": "Snackbar button text to undo unsubscribed from a chat"
+  },
+  "errorJoinChat": "Error joining chat",
+  "@errorJoinChat": {
+    "description": "Snackbar message shown when an error occurs while joining a chat"
+  },
+  "shareChat": "Share chat",
+  "@shareChat": {
+    "description": "Page title for share chat screen"
+  },
+  "chatIdCopied": "Chat id copied to clipboard",
+  "@chatIdCopied": {
+    "description": "Snackbar message shown when chat id is copied to clipboard"
+  },
+  "youAreInvited": "You are invited to {chatName}",
+  "@youAreInvited": {
+    "description": "Share message shown when user is invited to a chat",
+    "placeholders": {
+      "chatName": {
+        "type": "String",
+        "example": "Los Angeles. Clear"
+      }
+    }
+  },
+  "dialogTitleNewChat": "New chat",
+  "@dialogTitleNewChat": {
+    "description": "Title for new chat dialog"
+  },
+  "dialogActionCreateNewChat": "Create",
+  "@dialogActionCreateNewChat": {
+    "description": "Dialog action button text for new chat"
+  },
+  "dialogActionJoinExistingChat": "Join",
+  "@dialogActionJoinExistingChat": {
+    "description": "Dialog action button text join existing chat"
+  },
+  "dialogActionCancel": "Cancel",
+  "@dialogActionCancel": {
+    "description": "Dialog action button text for cancel"
+  },
+  "dialogCheckboxCreateNewChat": "Create new",
+  "@dialogCheckboxCreateNewChat": {
+    "description": "Dialog checkbox text for creating new chat"
+  },
+  "dialogTextHintCreateNew": "Chat id will be created",
+  "@dialogTextHintCreateNew": {
+    "description": "Dialog text hint for creating new chat"
+  },
+  "dialogTextHintJoinExisting": "Enter existing chat id",
+  "@dialogTextHintJoinExisting": {
+    "description": "Dialog text hint for joining existing chat"
+  }
+}

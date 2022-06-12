@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "421238012746",
+    "project_id": "wubbachat",
+    "storage_bucket": "wubbachat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421238012746:android:40e0578eb2ebd26fb21fb3",
+        "android_client_info": {
+          "package_name": "app.web.flutter.wubbachat.flutter_wubbachat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421238012746-gh5ipcuc3ftmmsm8d7qp9krvot49r3cn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuC_OIbBfR9XVIPmMFn97ZqTC5bpki6Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421238012746-gh5ipcuc3ftmmsm8d7qp9krvot49r3cn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

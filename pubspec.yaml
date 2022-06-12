@@ -1,0 +1,41 @@
+name: flutter_wubbachat
+description: A simple chat that uses Firebase Cloud Messages and Firebase Cloud Functions
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  bloc: ^8.0.3
+  chat_storage:
+    path: packages/chat_storage
+  cloud_functions: ^3.2.15
+  equatable: ^2.0.3
+  firebase_core: ^1.17.0
+  firebase_messaging: ^11.4.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.0.1
+  flutter_localizations:
+    sdk: flutter
+  go_router: ^3.1.0
+  hydrated_bloc: ^8.1.0
+  intl: ^0.17.0
+  json_annotation: ^4.5.0
+  qr_flutter: ^4.0.0
+  share_plus: ^4.0.7
+  uuid: ^3.0.6
+
+dev_dependencies:
+  bloc_test: ^9.0.3
+  build_runner: ^2.1.11
+  flutter_test:
+    sdk: flutter
+  json_serializable: ^6.2.0
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
