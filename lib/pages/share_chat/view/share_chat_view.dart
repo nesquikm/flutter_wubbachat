@@ -50,10 +50,13 @@ class ShareChatView extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Text(chat.name, style: theme.textTheme.headline5),
           ),
-          QrImage(
-            data: chat.toTopic(),
-            size: 300,
-            backgroundColor: Colors.white,
+          AspectRatio(
+            aspectRatio: 1,
+            child: QrImage(
+              data: chat.toTopic(),
+              size: 300,
+              backgroundColor: Colors.white,
+            ),
           ),
         ],
       ),
