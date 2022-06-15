@@ -28,6 +28,58 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
+class AppLifecycleObserver extends StatefulWidget {
+  const AppLifecycleObserver({
+    super.key,
+    required this.child,
+    required this.onInactive,
+    required this.onResumed,
+  });
+
+  final Widget child;
+  final void Function() onInactive;
+  final void Function() onResumed;
+
+  @override
+  State<AppLifecycleObserver> createState() => _AppLifecycleObserverState();
+}
+
+class _AppLifecycleObserverState extends State<AppLifecycleObserver>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.inactive:
+        widget.onInactive();
+        break;
+      case AppLifecycleState.resumed:
+        widget.onResumed();
+        break;
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.paused:
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
+
 Future<void> bootstrap(
   FutureOr<Widget> Function({
     required ChatRepository chatRepository,
@@ -52,8 +104,14 @@ Future<void> bootstrap(
 
   await HydratedBlocOverrides.runZoned(
     () async => runApp(
-      await builder(
-        chatRepository: chatRepository,
+      AppLifecycleObserver(
+        onInactive: () async {},
+        onResumed: () async {
+          await chatRepository.processBackgroundMessages();
+        },
+        child: await builder(
+          chatRepository: chatRepository,
+        ),
       ),
     ),
     storage: storage,

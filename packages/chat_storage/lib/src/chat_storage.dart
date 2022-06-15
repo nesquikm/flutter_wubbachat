@@ -17,16 +17,26 @@ class ChatStorage {
 
   /// Init all
   Future<void> init() async {
-    await Hive.initFlutter();
-
-    Hive
-      ..registerAdapter<User>(UserAdapter())
-      ..registerAdapter<Message>(MessageAdapter())
-      ..registerAdapter<Chat>(ChatAdapter());
+    await _initHive();
 
     _messagesBox = await Hive.openBox<Message>(_messagesBoxName);
     _chatsBox = await Hive.openBox<Chat>(_chatsBoxName);
     _localUserBox = await Hive.openBox<User>(_localUserBoxName);
+  }
+
+  static Future<void> _initHive() async {
+    await Hive.initFlutter();
+
+    _checkRegisterAdapter<User>(UserAdapter());
+    _checkRegisterAdapter<Message>(MessageAdapter());
+    _checkRegisterAdapter<Chat>(ChatAdapter());
+    _checkRegisterAdapter<BackgroundMessage>(BackgroundMessageAdapter());
+  }
+
+  static void _checkRegisterAdapter<T>(TypeAdapter<T> adapter) {
+    if (!Hive.isAdapterRegistered(adapter.typeId)) {
+      Hive.registerAdapter<T>(adapter);
+    }
   }
 
   /// Get local user
@@ -46,8 +56,8 @@ class ChatStorage {
 
   /// Put message to the storage (create chat and user if necessary)
   Future<void> putMessage({
-    required Message message,
     required String topic,
+    required Message message,
     void Function()? onChatNotFound,
   }) async {
     /// We don't update existing messages
@@ -165,8 +175,56 @@ class ChatStorage {
     await _chatsBox.clear();
   }
 
+  static Future<Box<BackgroundMessage>> _openBackgroundMessagesBox() async {
+    await _initHive();
+
+    return Hive.openBox<BackgroundMessage>(_backgroundMessagesBoxName);
+  }
+
+  static Future<void> _closeBackgroundMessagesBox(
+    Box<BackgroundMessage> backgroundMessagesBox,
+  ) async {
+    await backgroundMessagesBox.close();
+  }
+
+  /// Put background message to the storage
+  static Future<void> putBackgroundMessage({
+    required Message message,
+    required String topic,
+  }) async {
+    final backgroundMessagesBox = await _openBackgroundMessagesBox();
+
+    await backgroundMessagesBox.add(
+      BackgroundMessage(
+        topic: topic,
+        message: message,
+      ),
+    );
+
+    print('putBackgroundMessage: ${message.body}');
+    await _closeBackgroundMessagesBox(backgroundMessagesBox);
+  }
+
+  /// Process background messages
+  Future<void> processBackgroundMessages() async {
+    print('processBackgroundMessages');
+    final backgroundMessagesBox = await _openBackgroundMessagesBox();
+
+    for (final backgroundMessage in backgroundMessagesBox.values) {
+      print('processBackgroundMessages: ${backgroundMessage.message.body}');
+      await putMessage(
+        topic: backgroundMessage.topic,
+        message: backgroundMessage.message,
+      );
+    }
+
+    await backgroundMessagesBox.clear();
+    await _closeBackgroundMessagesBox(backgroundMessagesBox);
+  }
+
   static const _messagesBoxName = 'messages';
   static const _chatsBoxName = 'chats';
   static const _localUserBoxName = 'localUser';
   static const _localUserKey = 'localUserKey';
+  static const _backgroundMessagesBoxName = 'backgroundMessages';
 }

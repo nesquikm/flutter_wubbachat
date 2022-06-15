@@ -102,8 +102,8 @@ void main() {
       final message0 = Message.create(user: user0, body: 'Some body 0');
 
       await chatStorage.putMessage(
-        message: message0,
         topic: '123-456_Hello',
+        message: message0,
       );
 
       // Don't create a new chat from message
@@ -113,8 +113,8 @@ void main() {
       expect(chatStorage.getChatCount(), 1);
 
       await chatStorage.putMessage(
-        message: message0,
         topic: chat.toTopic(),
+        message: message0,
       );
 
       final chat0 = chatStorage.getChatAt(index: 0);
@@ -130,8 +130,8 @@ void main() {
       final user1 = User.create(nickname: 'Some nickname 1');
       final message1 = Message.create(user: user1, body: 'Some body 1');
       await chatStorage.putMessage(
-        message: message1,
         topic: chat.toTopic(),
+        message: message1,
       );
 
       /// Don't create a new chat
@@ -148,17 +148,64 @@ void main() {
 
       // Don't put existing messages
       await chatStorage.putMessage(
-        message: message0,
         topic: chat.toTopic(),
+        message: message0,
       );
       await chatStorage.putMessage(
-        message: message1,
         topic: chat.toTopic(),
+        message: message1,
       );
       expect(chat1.messages.length, 2);
 
       await chatStorage.createChat(name: 'Some chat 1');
       expect(chatStorage.getChatCount(), 2);
+    });
+
+    test('process background messages', () async {
+      await chatStorage.clearAll();
+
+      final chat0 = await chatStorage.createChat(name: 'Some chat 0');
+      final chat1 = await chatStorage.createChat(name: 'Some chat 1');
+
+      final user0 = User.create(nickname: 'Some nickname 0');
+      final message0 = Message.create(user: user0, body: 'Some body 0');
+
+      final user1 = User.create(nickname: 'Some nickname 1');
+      final message1 = Message.create(user: user0, body: 'Some body 1');
+
+      final user2 = User.create(nickname: 'Some nickname 2');
+      final message2 = Message.create(user: user0, body: 'Some body 2');
+
+      await ChatStorage.putBackgroundMessage(
+        message: message0,
+        topic: chat0.toTopic(),
+      );
+
+      expect(chatStorage.getChatMessages(id: chat0.id).length, 0);
+      expect(chatStorage.getChatMessages(id: chat1.id).length, 0);
+
+      await chatStorage.processBackgroundMessages();
+
+      expect(chatStorage.getChatMessages(id: chat0.id).length, 1);
+      expect(chatStorage.getChatMessages(id: chat1.id).length, 0);
+
+      await ChatStorage.putBackgroundMessage(
+        message: message1,
+        topic: chat1.toTopic(),
+      );
+
+      await ChatStorage.putBackgroundMessage(
+        message: message2,
+        topic: chat1.toTopic(),
+      );
+
+      expect(chatStorage.getChatMessages(id: chat0.id).length, 1);
+      expect(chatStorage.getChatMessages(id: chat1.id).length, 0);
+
+      await chatStorage.processBackgroundMessages();
+
+      expect(chatStorage.getChatMessages(id: chat0.id).length, 1);
+      expect(chatStorage.getChatMessages(id: chat1.id).length, 2);
     });
   });
 }

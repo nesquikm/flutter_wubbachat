@@ -117,12 +117,12 @@ class ChatRepository {
     final message = Message.create(user: await getLocalUser(), body: body);
     final fields = remoteMessageFieldsFromMessage(message);
 
-    await _chatStorage.putMessage(message: message, topic: topic);
+    await _chatStorage.putMessage(topic: topic, message: message);
 
     await _fb.sendMessageToTopic(topic, fields);
   }
 
-  Future<void> handleRemoteMessage({
+  Future<void> _handleForegroundRemoteMessage({
     required RemoteMessage remoteMessage,
   }) async {
     try {
@@ -130,13 +130,30 @@ class ChatRepository {
       final message = messageFromRemoteMessage(remoteMessage);
 
       await _chatStorage.putMessage(
-        message: message,
         topic: topic,
+        message: message,
         onChatNotFound: () => _onChatNotFound(topic),
       );
     } catch (error) {
-      log('handleRemoteMessage: $error');
+      log('handleForegroundRemoteMessage: $error');
     }
+  }
+
+  static Future<void> _handleBackgroundRemoteMessage({
+    required RemoteMessage remoteMessage,
+  }) async {
+    try {
+      final topic = topicFromRemoteMessage(remoteMessage);
+      final message = messageFromRemoteMessage(remoteMessage);
+
+      await ChatStorage.putBackgroundMessage(message: message, topic: topic);
+    } catch (error) {
+      log('handleBackgroundRemoteMessage: $error');
+    }
+  }
+
+  Future<void> processBackgroundMessages() {
+    return _chatStorage.processBackgroundMessages();
   }
 
   //TODO(nesquikm): call this somewhere
@@ -158,7 +175,7 @@ class ChatRepository {
           'Message also contained a notification: ${remoteMessage.notification}');
     }
 
-    handleRemoteMessage(remoteMessage: remoteMessage);
+    _handleForegroundRemoteMessage(remoteMessage: remoteMessage);
   }
 
   //TODO(nesquikm): change to named parameters
@@ -209,7 +226,12 @@ Future<void> _onBackgroundMessage(RemoteMessage remoteMessage) async {
   // TODO: process background message
   print('HAHA222 Handling a background message: ${remoteMessage.messageId}');
 
-  final chatRepository = ChatRepository();
-  await chatRepository.init();
-  await chatRepository.handleRemoteMessage(remoteMessage: remoteMessage);
+  await ChatRepository._handleBackgroundRemoteMessage(
+    remoteMessage: remoteMessage,
+  );
+
+  // Stop doing shitty stuff
+  // final chatRepository = ChatRepository();
+  // await chatRepository.init();
+  // await chatRepository.handleRemoteMessage(remoteMessage: remoteMessage);
 }
