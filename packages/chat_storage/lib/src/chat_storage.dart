@@ -12,7 +12,6 @@ class ChatStorage {
   /// We can't use LazyBox because HiveList is not support it yet
   /// https://github.com/hivedb/hive/issues/866
   late final Box<Message> _messagesBox;
-  late final Box<User> _usersBox;
   late final Box<Chat> _chatsBox;
   late final Box<User> _localUserBox;
 
@@ -26,7 +25,6 @@ class ChatStorage {
       ..registerAdapter<Chat>(ChatAdapter());
 
     _messagesBox = await Hive.openBox<Message>(_messagesBoxName);
-    _usersBox = await Hive.openBox<User>(_usersBoxName);
     _chatsBox = await Hive.openBox<Chat>(_chatsBoxName);
     _localUserBox = await Hive.openBox<User>(_localUserBoxName);
   }
@@ -60,11 +58,6 @@ class ChatStorage {
     if (chat == null) {
       onChatNotFound?.call();
       return;
-    }
-
-    // We don't update existing user
-    if (!_usersBox.containsKey(message.from.id)) {
-      await _usersBox.put(message.from.id, message.from);
     }
 
     await _messagesBox.put(message.id, message);
@@ -169,12 +162,10 @@ class ChatStorage {
   Future<void> clearAll() async {
     await _localUserBox.clear();
     await _messagesBox.clear();
-    await _usersBox.clear();
     await _chatsBox.clear();
   }
 
   static const _messagesBoxName = 'messages';
-  static const _usersBoxName = 'users';
   static const _chatsBoxName = 'chats';
   static const _localUserBoxName = 'localUser';
   static const _localUserKey = 'localUserKey';

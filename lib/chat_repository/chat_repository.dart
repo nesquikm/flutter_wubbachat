@@ -62,7 +62,7 @@ class ChatRepository {
   }
 
   /// Create an empty chat by topic subscribe to it
-  Future<Chat> createChatFromTopic(String topic) async {
+  Future<Chat> createChatFromTopic({required String topic}) async {
     final chat = await _chatStorage.createChatFromTopic(topic: topic);
 
     await _fb.subscribeToTopic(chat.toTopic());
@@ -110,14 +110,21 @@ class ChatRepository {
     return _chatStorage.getChatMessages(id: id);
   }
 
-  Future<void> sendMessage(String topic, String body) async {
+  Future<void> sendMessage({
+    required String topic,
+    required String body,
+  }) async {
     final message = Message.create(user: await getLocalUser(), body: body);
     final fields = remoteMessageFieldsFromMessage(message);
+
+    await _chatStorage.putMessage(message: message, topic: topic);
 
     await _fb.sendMessageToTopic(topic, fields);
   }
 
-  Future<void> handleRemoteMessage(RemoteMessage remoteMessage) async {
+  Future<void> handleRemoteMessage({
+    required RemoteMessage remoteMessage,
+  }) async {
     try {
       final topic = topicFromRemoteMessage(remoteMessage);
       final message = messageFromRemoteMessage(remoteMessage);
@@ -141,6 +148,7 @@ class ChatRepository {
     await _fb.unsubscribeFromTopic(topic);
   }
 
+  //TODO(nesquikm): change to named parameters
   void _onForegroundMessage(RemoteMessage remoteMessage) {
     print('HAHA Got a message whilst in the foreground!');
     print('Message data: ${remoteMessage.data}');
@@ -150,9 +158,10 @@ class ChatRepository {
           'Message also contained a notification: ${remoteMessage.notification}');
     }
 
-    handleRemoteMessage(remoteMessage);
+    handleRemoteMessage(remoteMessage: remoteMessage);
   }
 
+  //TODO(nesquikm): change to named parameters
   static String topicFromRemoteMessage(RemoteMessage remoteMessage) {
     final topic = remoteMessage.from;
     if (topic == null) {
@@ -161,7 +170,9 @@ class ChatRepository {
     return topic;
   }
 
+  //TODO(nesquikm): change to named parameters
   static User userFromRemoteMessage(RemoteMessage remoteMessage) {
+    print(remoteMessage.data);
     final id = remoteMessage.data['fromId'] as String?;
     final nickname = remoteMessage.data['fromNickname'] as String?;
     if (id == null || nickname == null) {
@@ -170,17 +181,21 @@ class ChatRepository {
     return User(id: id, nickname: nickname);
   }
 
+  //TODO(nesquikm): change to named parameters
   static Message messageFromRemoteMessage(RemoteMessage remoteMessage) {
     final user = userFromRemoteMessage(remoteMessage);
+    final id = remoteMessage.data['id'] as String?;
     final body = remoteMessage.data['messageBody'] as String?;
     if (body == null) {
       throw Exception('Error while constructing Message from RemoteMessage');
     }
-    return Message.create(user: user, body: body);
+    return Message.create(id: id, user: user, body: body);
   }
 
+  //TODO(nesquikm): change to named parameters
   static Map<String, String> remoteMessageFieldsFromMessage(Message message) {
     return {
+      'id': message.id,
       'fromId': message.from.id,
       'fromNickname': message.from.nickname,
       'messageBody': message.body,
@@ -188,6 +203,7 @@ class ChatRepository {
   }
 }
 
+//TODO(nesquikm): change to named parameters
 Future<void> _onBackgroundMessage(RemoteMessage remoteMessage) async {
   await Firebase.initializeApp();
   // TODO: process background message
@@ -195,5 +211,5 @@ Future<void> _onBackgroundMessage(RemoteMessage remoteMessage) async {
 
   final chatRepository = ChatRepository();
   await chatRepository.init();
-  await chatRepository.handleRemoteMessage(remoteMessage);
+  await chatRepository.handleRemoteMessage(remoteMessage: remoteMessage);
 }

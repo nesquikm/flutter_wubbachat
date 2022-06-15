@@ -79,5 +79,9 @@
   "dialogTextHintJoinExisting": "Enter existing chat id",
   "@dialogTextHintJoinExisting": {
     "description": "Dialog text hint for joining existing chat"
+  },
+  "chatMessageHint": "Message",
+  "@chatMessageHint": {
+    "description": "Text input hint for chat message"
   }
 }

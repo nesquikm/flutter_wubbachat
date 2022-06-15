@@ -19,12 +19,13 @@ class Message extends HiveObject {
 
   /// Create new chat message
   factory Message.create({
+    String? id,
     required User user,
     required String body,
     int? received,
   }) =>
       Message(
-        id: const Uuid().v4(),
+        id: id ?? const Uuid().v4(),
         from: user,
         body: body,
         received: received ?? DateTime.now().millisecondsSinceEpoch,

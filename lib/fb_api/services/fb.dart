@@ -56,13 +56,15 @@ class Fb {
     return callable.call<T>(parameters);
   }
 
-  Future<HttpsCallableResult<String>> sendMessageToTopic(
+  Future<HttpsCallableResult<Map<String, dynamic>>> sendMessageToTopic(
     String topic,
     Map<String, String> fields,
   ) async {
     final callable = FirebaseFunctions.instance.httpsCallable(
       'sendMessageToTopic',
     );
-    return callable.call<String>(fields);
+
+    print({...fields, 'topic': topic});
+    return callable.call<Map<String, dynamic>>({...fields, 'topic': topic});
   }
 }

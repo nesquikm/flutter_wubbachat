@@ -31,7 +31,7 @@ class _ChatsViewState extends State<ChatsView> {
       }
 
       try {
-        await context.read<ChatRepository>().createChatFromTopic(result);
+        await context.read<ChatRepository>().createChatFromTopic(topic: result);
       } catch (error) {
         log('handleRemoteMessage: $error');
 
