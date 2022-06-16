@@ -12,7 +12,7 @@ import 'package:words_api/words_api.dart';
 export 'package:chat_storage/chat_storage.dart';
 
 class ChatRepository {
-  ChatRepository()
+  ChatRepository({required this.onNavigateToChat})
       : _fb = Fb(),
         _chatStorage = ChatStorage(),
         _wordsApi = WordsApi();
@@ -20,11 +20,13 @@ class ChatRepository {
   final Fb _fb;
   final ChatStorage _chatStorage;
   final WordsApi _wordsApi;
+  final void Function(String id) onNavigateToChat;
 
   Future<void> init() async {
     await _fb.init(
       onForegroundMessage: _onForegroundMessage,
       onBackgroundMessage: _onBackgroundMessage,
+      onNotificationClick: _onNotificationClick,
     );
 
     await _chatStorage.init();
@@ -172,10 +174,24 @@ class ChatRepository {
 
     if (remoteMessage.notification != null) {
       print(
-          'Message also contained a notification: ${remoteMessage.notification}');
+        'Message also contained a notification: ${remoteMessage.notification}',
+      );
     }
 
     _handleForegroundRemoteMessage(remoteMessage: remoteMessage);
+  }
+
+  void _onNotificationClick(RemoteMessage remoteMessage) {
+    final topic = topicFromRemoteMessage(remoteMessage);
+    final id = ChatTopic.fromTopic(topic).id;
+
+    try {
+      // Ensure chat is available
+      final chat = getChat(id: id);
+      onNavigateToChat(chat.id);
+    } catch (error) {
+      log('_onNotificationClick: $error');
+    }
   }
 
   //TODO(nesquikm): change to named parameters

@@ -7,6 +7,7 @@ class Fb {
   Future<void> init({
     required void Function(RemoteMessage message) onForegroundMessage,
     required Future<void> Function(RemoteMessage message) onBackgroundMessage,
+    required void Function(RemoteMessage message) onNotificationClick,
   }) async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -39,6 +40,7 @@ class Fb {
       _handleNotificationClick(
         onForegroundMessage: onForegroundMessage,
         remoteMessage: initialMessage,
+        onNotificationClick: onNotificationClick,
       );
     }
 
@@ -46,6 +48,7 @@ class Fb {
       (remoteMessage) => _handleNotificationClick(
         onForegroundMessage: onForegroundMessage,
         remoteMessage: remoteMessage,
+        onNotificationClick: onNotificationClick,
       ),
     );
   }
@@ -53,8 +56,10 @@ class Fb {
   void _handleNotificationClick({
     required void Function(RemoteMessage message) onForegroundMessage,
     required RemoteMessage remoteMessage,
+    required Function(RemoteMessage message) onNotificationClick,
   }) {
     onForegroundMessage(remoteMessage);
+    onNotificationClick(remoteMessage);
   }
 
   Future<String?> getToken({

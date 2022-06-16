@@ -92,7 +92,11 @@ Future<void> bootstrap(
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  final chatRepository = ChatRepository();
+  final chatRepository = ChatRepository(
+    onNavigateToChat: (chatId) {
+      log('navigate to chat $chatId');
+    },
+  );
 
   await chatRepository.init();
 
