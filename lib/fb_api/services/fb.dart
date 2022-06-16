@@ -5,7 +5,7 @@ import 'package:flutter_wubbachat/firebase_options.dart';
 
 class Fb {
   Future<void> init({
-    required Function(RemoteMessage message) onForegroundMessage,
+    required void Function(RemoteMessage message) onForegroundMessage,
     required Future<void> Function(RemoteMessage message) onBackgroundMessage,
   }) async {
     await Firebase.initializeApp(
@@ -32,6 +32,29 @@ class Fb {
     FirebaseMessaging.onMessage.listen(onForegroundMessage);
 
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      _handleNotificationClick(
+        onForegroundMessage: onForegroundMessage,
+        remoteMessage: initialMessage,
+      );
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (remoteMessage) => _handleNotificationClick(
+        onForegroundMessage: onForegroundMessage,
+        remoteMessage: remoteMessage,
+      ),
+    );
+  }
+
+  void _handleNotificationClick({
+    required void Function(RemoteMessage message) onForegroundMessage,
+    required RemoteMessage remoteMessage,
+  }) {
+    onForegroundMessage(remoteMessage);
   }
 
   Future<String?> getToken({
