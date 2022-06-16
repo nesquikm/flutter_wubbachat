@@ -4,6 +4,7 @@ import 'package:chat_storage/chat_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_wubbachat/chat_repository/cubit/deeproute_cubit.dart';
 import 'package:flutter_wubbachat/fb_api/fb_api.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
@@ -12,15 +13,16 @@ import 'package:words_api/words_api.dart';
 export 'package:chat_storage/chat_storage.dart';
 
 class ChatRepository {
-  ChatRepository({required this.onNavigateToChat})
+  ChatRepository()
       : _fb = Fb(),
         _chatStorage = ChatStorage(),
-        _wordsApi = WordsApi();
+        _wordsApi = WordsApi(),
+        deepRouteCubit = DeepRouteCubit();
 
   final Fb _fb;
   final ChatStorage _chatStorage;
   final WordsApi _wordsApi;
-  final void Function(String id) onNavigateToChat;
+  final DeepRouteCubit deepRouteCubit;
 
   Future<void> init() async {
     await _fb.init(
@@ -188,7 +190,7 @@ class ChatRepository {
     try {
       // Ensure chat is available
       final chat = getChat(id: id);
-      onNavigateToChat(chat.id);
+      deepRouteCubit.setRoute(type: DeepRouteType.chat, route: chat.id);
     } catch (error) {
       log('_onNotificationClick: $error');
     }
@@ -245,9 +247,4 @@ Future<void> _onBackgroundMessage(RemoteMessage remoteMessage) async {
   await ChatRepository._handleBackgroundRemoteMessage(
     remoteMessage: remoteMessage,
   );
-
-  // Stop doing shitty stuff
-  // final chatRepository = ChatRepository();
-  // await chatRepository.init();
-  // await chatRepository.handleRemoteMessage(remoteMessage: remoteMessage);
 }

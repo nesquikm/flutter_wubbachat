@@ -92,11 +92,7 @@ Future<void> bootstrap(
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  final chatRepository = ChatRepository(
-    onNavigateToChat: (chatId) {
-      log('navigate to chat $chatId');
-    },
-  );
+  final chatRepository = ChatRepository();
 
   await chatRepository.init();
 
@@ -105,6 +101,8 @@ Future<void> bootstrap(
         ? HydratedStorage.webStorageDirectory
         : await getApplicationDocumentsDirectory(),
   );
+
+  await chatRepository.processBackgroundMessages();
 
   await HydratedBlocOverrides.runZoned(
     () async => runApp(

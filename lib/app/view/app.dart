@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_wubbachat/app/cubit/nav_cubit.dart';
 import 'package:flutter_wubbachat/chat_repository/chat_repository.dart';
+import 'package:flutter_wubbachat/chat_repository/cubit/deeproute_cubit.dart';
 import 'package:flutter_wubbachat/l10n/l10n.dart';
 import 'package:flutter_wubbachat/pages/pages.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +31,7 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (_) => NavCubit('/${HomePage.pageList[0]}'),
           ),
+          BlocProvider.value(value: chatRepository.deepRouteCubit),
         ],
         child: const AppView(),
       ),
@@ -76,20 +78,35 @@ class AppView extends StatelessWidget {
       debugLogDiagnostics: true,
     );
 
-    return MaterialApp.router(
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.green,
-          brightness: Brightness.dark,
+    return BlocListener<DeepRouteCubit, DeepRouteState>(
+      listener: (context, state) {
+        switch (state.type) {
+          case DeepRouteType.chat:
+            router.goNamed(
+              ChatPageName.chat.name,
+              params: {'page': HomePageName.chats.name, 'id': state.route!},
+            );
+            break;
+          case null:
+            break;
+        }
+        context.read<DeepRouteCubit>().clear();
+      },
+      child: MaterialApp.router(
+        routeInformationParser: router.routeInformationParser,
+        routerDelegate: router.routerDelegate,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.green,
+            brightness: Brightness.dark,
+          ),
         ),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }
