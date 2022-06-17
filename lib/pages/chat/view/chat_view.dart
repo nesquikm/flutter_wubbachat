@@ -64,6 +64,7 @@ class _ChatViewState extends State<ChatView> {
                 decoration: InputDecoration.collapsed(
                   hintText: l10n.chatMessageHint,
                 ),
+                maxLength: 768,
               ),
             ),
           ),
@@ -89,6 +90,8 @@ class _ChatViewState extends State<ChatView> {
         params: {'page': HomePageName.chats.name, 'id': widget.id},
       );
     }
+
+    final localUser = context.read<ChatRepository>().getLocalUser();
 
     return ValueListenableBuilder(
       valueListenable:
@@ -120,7 +123,10 @@ class _ChatViewState extends State<ChatView> {
                   itemBuilder: (BuildContext context, int index) {
                     final resversedIndex = messages.length - index - 1;
                     final message = messages[resversedIndex];
-                    return MessageView(message: message);
+                    return MessageView(
+                      message: message,
+                      fromLocalUser: localUser.id == message.from.id,
+                    );
                   },
                 ),
               ),

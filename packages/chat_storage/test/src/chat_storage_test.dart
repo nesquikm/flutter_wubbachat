@@ -29,7 +29,7 @@ void main() {
       await chatStorage.clearAll();
 
       expect(chatStorage.getLocalUser(), isNull);
-      final user = User.create(nickname: 'Some user');
+      final user = User.create(nickname: 'Some user', color: 0xFF0000FF);
       await chatStorage.setLocalUser(user: user);
       expect(chatStorage.getLocalUser(), user);
       await chatStorage.clearAll();
@@ -98,7 +98,7 @@ void main() {
     test('store messages to a chat', () async {
       await chatStorage.clearAll();
 
-      final user0 = User.create(nickname: 'Some nickname 0');
+      final user0 = User.create(nickname: 'Some nickname 0', color: 0xFF0000FF);
       final message0 = Message.create(user: user0, body: 'Some body 0');
 
       await chatStorage.putMessage(
@@ -127,7 +127,7 @@ void main() {
       expect(chat0.name, 'Some chat 0');
       expect(chat0.id, chat.id);
 
-      final user1 = User.create(nickname: 'Some nickname 1');
+      final user1 = User.create(nickname: 'Some nickname 1', color: 0xFF0000FF);
       final message1 = Message.create(user: user1, body: 'Some body 1');
       await chatStorage.putMessage(
         topic: chat.toTopic(),
@@ -167,13 +167,13 @@ void main() {
       final chat0 = await chatStorage.createChat(name: 'Some chat 0');
       final chat1 = await chatStorage.createChat(name: 'Some chat 1');
 
-      final user0 = User.create(nickname: 'Some nickname 0');
+      final user0 = User.create(nickname: 'Some nickname 0', color: 0xFF0000FF);
       final message0 = Message.create(user: user0, body: 'Some body 0');
 
-      final user1 = User.create(nickname: 'Some nickname 1');
+      final user1 = User.create(nickname: 'Some nickname 1', color: 0x00FF00FF);
       final message1 = Message.create(user: user0, body: 'Some body 1');
 
-      final user2 = User.create(nickname: 'Some nickname 2');
+      final user2 = User.create(nickname: 'Some nickname 2', color: 0x0000FFFF);
       final message2 = Message.create(user: user0, body: 'Some body 2');
 
       await ChatStorage.putBackgroundMessage(

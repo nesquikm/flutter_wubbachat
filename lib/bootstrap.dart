@@ -103,6 +103,7 @@ Future<void> bootstrap(
   );
 
   await chatRepository.processBackgroundMessages();
+  await chatRepository.serice();
 
   await HydratedBlocOverrides.runZoned(
     () async => runApp(
@@ -110,6 +111,7 @@ Future<void> bootstrap(
         onInactive: () async {},
         onResumed: () async {
           await chatRepository.processBackgroundMessages();
+          await chatRepository.serice();
         },
         child: await builder(
           chatRepository: chatRepository,

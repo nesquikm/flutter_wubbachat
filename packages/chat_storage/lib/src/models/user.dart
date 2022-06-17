@@ -9,11 +9,11 @@ part 'user.g.dart';
 @HiveType(typeId: 0)
 class User extends HiveObject {
   /// {@macro user}
-  User({required this.id, required this.nickname});
+  User({required this.id, required this.nickname, required this.color});
 
   /// Create user info
-  factory User.create({required String nickname}) =>
-      User(id: const Uuid().v4(), nickname: nickname);
+  factory User.create({required String nickname, required int color}) =>
+      User(id: const Uuid().v4(), nickname: nickname, color: color);
 
   /// User id
   @HiveField(0)
@@ -22,4 +22,8 @@ class User extends HiveObject {
   /// User nickname
   @HiveField(1)
   final String nickname;
+
+  /// User id
+  @HiveField(2)
+  final int color;
 }

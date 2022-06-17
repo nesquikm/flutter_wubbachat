@@ -35,21 +35,23 @@ class ChatRepository {
     await _wordsApi.init();
   }
 
-  Future<User> getLocalUser() async {
+  User getLocalUser() {
     var user = _chatStorage.getLocalUser();
     if (user == null) {
       user = createRandomUser();
-      await _chatStorage.setLocalUser(user: user);
+      _chatStorage.setLocalUser(user: user);
     }
     return user;
   }
 
   User createRandomUser() {
     final mood = toBeginningOfSentenceCase(_wordsApi.moodList.next.name);
-    final color = toBeginningOfSentenceCase(_wordsApi.colorList.next.name);
+    final colorKind = _wordsApi.colorList.next;
+    final color = toBeginningOfSentenceCase(colorKind.name);
     final animal = toBeginningOfSentenceCase(_wordsApi.animalList.next.name);
     return User.create(
       nickname: '$mood $color $animal',
+      color: colorKind.color,
     );
   }
 
@@ -160,9 +162,11 @@ class ChatRepository {
     return _chatStorage.processBackgroundMessages();
   }
 
-  //TODO(nesquikm): call this somewhere
-  Future<void> cleanup() async {
+  Future<void> serice() async {
     await _chatStorage.clearDeleted();
+    _chatStorage.getChats().forEach((chat) async {
+      await _fb.subscribeToTopic(chat.toTopic());
+    });
   }
 
   Future<void> _onChatNotFound(String topic) async {
@@ -210,10 +214,11 @@ class ChatRepository {
     print(remoteMessage.data);
     final id = remoteMessage.data['fromId'] as String?;
     final nickname = remoteMessage.data['fromNickname'] as String?;
+    final color = int.parse(remoteMessage.data['fromColor'] as String);
     if (id == null || nickname == null) {
       throw Exception('Error while constructing User from RemoteMessage');
     }
-    return User(id: id, nickname: nickname);
+    return User(id: id, nickname: nickname, color: color);
   }
 
   //TODO(nesquikm): change to named parameters
@@ -233,6 +238,7 @@ class ChatRepository {
       'id': message.id,
       'fromId': message.from.id,
       'fromNickname': message.from.nickname,
+      'fromColor': message.from.color.toString(),
       'messageBody': message.body,
     };
   }
