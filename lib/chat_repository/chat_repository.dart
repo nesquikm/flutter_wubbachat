@@ -44,6 +44,15 @@ class ChatRepository {
     return user;
   }
 
+  Future<void> newLocalUser() async {
+    final user = createRandomUser();
+    await _chatStorage.setLocalUser(user: user);
+  }
+
+  ValueListenable<Box<User>> getLocalUserListenable() {
+    return _chatStorage.getLocalUserListenable();
+  }
+
   User createRandomUser() {
     final mood = toBeginningOfSentenceCase(_wordsApi.moodList.next.name);
     final colorKind = _wordsApi.colorList.next;

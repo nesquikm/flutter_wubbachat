@@ -44,21 +44,23 @@ class ShareChatView extends StatelessWidget {
           IconButton(onPressed: _onCopy, icon: const Icon(Icons.copy)),
         ],
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(chat.name, style: theme.textTheme.headline5),
-          ),
-          AspectRatio(
-            aspectRatio: 1,
-            child: QrImage(
-              data: chat.toTopic(),
-              size: 300,
-              backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(chat.name, style: theme.textTheme.headline5),
             ),
-          ),
-        ],
+            AspectRatio(
+              aspectRatio: 1,
+              child: QrImage(
+                data: chat.toTopic(),
+                size: 300,
+                backgroundColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

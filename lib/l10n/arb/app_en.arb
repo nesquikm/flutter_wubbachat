@@ -83,5 +83,9 @@
   "chatMessageHint": "Message",
   "@chatMessageHint": {
     "description": "Text input hint for chat message"
+  },
+  "changeIdentity": "Change identity",
+  "@changeIdentity": {
+    "description": "Button text for changing identity"
   }
 }
