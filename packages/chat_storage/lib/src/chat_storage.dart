@@ -93,6 +93,9 @@ class ChatStorage {
   /// Create an chat from topic
   Future<Chat> createChatFromTopic({required String topic}) async {
     final chat = Chat.fromTopic(topic: topic, messagesBox: _messagesBox);
+    if (isChatExists(id: chat.id)) {
+      throw Exception('Chat already exists');
+    }
     return _putChat(chat: chat);
   }
 
@@ -129,6 +132,12 @@ class ChatStorage {
   /// Get chat by id
   Chat getChat({required String id}) {
     return _chatsBox.get(id)!;
+  }
+
+  /// Is chat exists?
+  bool isChatExists({required String id, bool includeDeleted = false}) {
+    final chat = _chatsBox.get(id);
+    return chat != null && (includeDeleted || !chat.deleted);
   }
 
   /// Get listenable for the chat by id

@@ -46,8 +46,12 @@ void main() {
       expect(chat.name, 'Some chat');
       expect(chat.deleted, false);
       expect(chatStorage.getChat(id: chat.id).name, 'Some chat');
+      expect(chatStorage.isChatExists(id: chat.id), true);
 
       await chatStorage.deleteChat(id: chat.id);
+      expect(chatStorage.isChatExists(id: chat.id), false);
+      expect(
+          chatStorage.isChatExists(id: chat.id, includeDeleted: true), false);
       expect(chatStorage.getChatCount(), 0);
     });
     test('sort chats', () async {
@@ -79,9 +83,30 @@ void main() {
 
       expect(chatStorage.getChatAt(index: 0).deleted, false);
 
+      final id = chatStorage
+          .getChatAt(
+            index: 0,
+          )
+          .id;
+
       await chatStorage.markChatAsDeleted(
-        id: chatStorage.getChatAt(index: 0).id,
+        id: id,
         deleted: true,
+      );
+
+      expect(
+        chatStorage.isChatExists(
+          id: id,
+        ),
+        false,
+      );
+
+      expect(
+        chatStorage.isChatExists(
+          id: id,
+          includeDeleted: true,
+        ),
+        true,
       );
 
       expect(
