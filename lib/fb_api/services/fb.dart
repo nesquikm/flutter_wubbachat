@@ -13,22 +13,12 @@ class Fb {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    /// TODO(nesquikm): puth this thing into config
-    FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+    // TODO(nesquikm): puth this thing into config
+    // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
     final messaging = FirebaseMessaging.instance;
 
-    final settings = await messaging.requestPermission(
-        // alert: true,
-        // announcement: false,
-        // badge: true,
-        // carPlay: false,
-        // criticalAlert: false,
-        // provisional: false,
-        // sound: true,
-        );
-
-    print('User granted permission: ${settings.authorizationStatus}');
+    await messaging.requestPermission();
 
     FirebaseMessaging.onMessage.listen(onForegroundMessage);
 
@@ -92,7 +82,6 @@ class Fb {
       'sendMessageToTopic',
     );
 
-    print({...fields, 'topic': topic});
     return callable.call<Map<String, dynamic>>({...fields, 'topic': topic});
   }
 }

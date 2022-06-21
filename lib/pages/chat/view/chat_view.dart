@@ -82,8 +82,6 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     void _onSharePressed() {
       context.goNamed(
         ChatPageName.sharechat.name,

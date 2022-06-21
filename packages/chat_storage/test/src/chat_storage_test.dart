@@ -170,10 +170,8 @@ void main() {
       final user0 = User.create(nickname: 'Some nickname 0', color: 0xFF0000FF);
       final message0 = Message.create(user: user0, body: 'Some body 0');
 
-      final user1 = User.create(nickname: 'Some nickname 1', color: 0x00FF00FF);
       final message1 = Message.create(user: user0, body: 'Some body 1');
 
-      final user2 = User.create(nickname: 'Some nickname 2', color: 0x0000FFFF);
       final message2 = Message.create(user: user0, body: 'Some body 2');
 
       await ChatStorage.putBackgroundMessage(

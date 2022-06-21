@@ -129,7 +129,7 @@ class ChatRepository {
     required String topic,
     required String body,
   }) async {
-    final message = Message.create(user: await getLocalUser(), body: body);
+    final message = Message.create(user: getLocalUser(), body: body);
     final fields = remoteMessageFieldsFromMessage(message);
 
     await _chatStorage.putMessage(topic: topic, message: message);
@@ -182,17 +182,7 @@ class ChatRepository {
     await _fb.unsubscribeFromTopic(topic);
   }
 
-  //TODO(nesquikm): change to named parameters
   void _onForegroundMessage(RemoteMessage remoteMessage) {
-    print('HAHA Got a message whilst in the foreground!');
-    print('Message data: ${remoteMessage.data}');
-
-    if (remoteMessage.notification != null) {
-      print(
-        'Message also contained a notification: ${remoteMessage.notification}',
-      );
-    }
-
     _handleForegroundRemoteMessage(remoteMessage: remoteMessage);
   }
 
@@ -209,7 +199,6 @@ class ChatRepository {
     }
   }
 
-  //TODO(nesquikm): change to named parameters
   static String topicFromRemoteMessage(RemoteMessage remoteMessage) {
     final topic = remoteMessage.from;
     if (topic == null) {
@@ -218,9 +207,7 @@ class ChatRepository {
     return topic;
   }
 
-  //TODO(nesquikm): change to named parameters
   static User userFromRemoteMessage(RemoteMessage remoteMessage) {
-    print(remoteMessage.data);
     final id = remoteMessage.data['fromId'] as String?;
     final nickname = remoteMessage.data['fromNickname'] as String?;
     final color = int.parse(remoteMessage.data['fromColor'] as String);
@@ -230,7 +217,6 @@ class ChatRepository {
     return User(id: id, nickname: nickname, color: color);
   }
 
-  //TODO(nesquikm): change to named parameters
   static Message messageFromRemoteMessage(RemoteMessage remoteMessage) {
     final user = userFromRemoteMessage(remoteMessage);
     final id = remoteMessage.data['id'] as String?;
@@ -241,7 +227,6 @@ class ChatRepository {
     return Message.create(id: id, user: user, body: body);
   }
 
-  //TODO(nesquikm): change to named parameters
   static Map<String, String> remoteMessageFieldsFromMessage(Message message) {
     return {
       'id': message.id,
@@ -253,12 +238,8 @@ class ChatRepository {
   }
 }
 
-//TODO(nesquikm): change to named parameters
 Future<void> _onBackgroundMessage(RemoteMessage remoteMessage) async {
   await Firebase.initializeApp();
-  // TODO: process background message
-  print('HAHA222 Handling a background message: ${remoteMessage.messageId}');
-
   await ChatRepository._handleBackgroundRemoteMessage(
     remoteMessage: remoteMessage,
   );

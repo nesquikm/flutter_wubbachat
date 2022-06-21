@@ -201,17 +201,14 @@ class ChatStorage {
       ),
     );
 
-    print('putBackgroundMessage: ${message.body}');
     await _closeBackgroundMessagesBox(backgroundMessagesBox);
   }
 
   /// Process background messages
   Future<void> processBackgroundMessages() async {
-    print('processBackgroundMessages');
     final backgroundMessagesBox = await _openBackgroundMessagesBox();
 
     for (final backgroundMessage in backgroundMessagesBox.values) {
-      print('processBackgroundMessages: ${backgroundMessage.message.body}');
       await putMessage(
         topic: backgroundMessage.topic,
         message: backgroundMessage.message,
