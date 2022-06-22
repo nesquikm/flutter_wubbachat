@@ -144,8 +144,6 @@ class ChatRepository {
       final topic = topicFromRemoteMessage(remoteMessage);
       final message = messageFromRemoteMessage(remoteMessage);
 
-      print('$topic : $message');
-
       await _chatStorage.putMessage(
         topic: topic,
         message: message,
