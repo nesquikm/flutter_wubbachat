@@ -52,30 +52,38 @@ class _ChatViewState extends State<ChatView> {
 
     return SizedBox(
       width: double.infinity,
-      height: 64,
-      child: Row(
-        children: [
-          Flexible(
-            child: Container(
-              margin: const EdgeInsets.all(16),
-              child: TextField(
-                onSubmitted: (value) => _onSend(context),
-                controller: _textEditingController,
-                decoration: InputDecoration.collapsed(
-                  hintText: l10n.chatMessageHint,
+      child: Form(
+        onChanged: () {
+          setState(() {});
+        },
+        child: Row(
+          children: [
+            Flexible(
+              child: Container(
+                margin: const EdgeInsets.all(16),
+                child: TextFormField(
+                  onFieldSubmitted: (_) => _onSend(context),
+                  controller: _textEditingController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: l10n.chatMessageHint,
+                  ),
+                  maxLength: 768,
+                  maxLines: 4,
+                  minLines: 1,
                 ),
-                maxLength: 768,
               ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            child: IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: () => _onSend(context),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              child: IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () => _textEditingController.text.isNotEmpty
+                    ? _onSend(context)
+                    : null,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
