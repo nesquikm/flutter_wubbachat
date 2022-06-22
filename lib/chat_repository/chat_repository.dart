@@ -144,6 +144,8 @@ class ChatRepository {
       final topic = topicFromRemoteMessage(remoteMessage);
       final message = messageFromRemoteMessage(remoteMessage);
 
+      print('$topic : $message');
+
       await _chatStorage.putMessage(
         topic: topic,
         message: message,
@@ -200,7 +202,7 @@ class ChatRepository {
   }
 
   static String topicFromRemoteMessage(RemoteMessage remoteMessage) {
-    final topic = remoteMessage.from;
+    final topic = remoteMessage.from ?? remoteMessage.data['topic'] as String?;
     if (topic == null) {
       throw Exception('Error while constructing topic from RemoteMessage');
     }
