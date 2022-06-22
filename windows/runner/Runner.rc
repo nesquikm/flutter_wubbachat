@@ -95,7 +95,7 @@ BEGIN
             VALUE "InternalName", "flutter_wubbachat" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 app.web.flutter.wubbachat.flutter-wubbachat. All rights reserved." "\0"
             VALUE "OriginalFilename", "flutter_wubbachat.exe" "\0"
-            VALUE "ProductName", "Flutter Wubbachat" "\0"
+            VALUE "ProductName", "Wubbachat" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

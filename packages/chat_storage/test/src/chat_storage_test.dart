@@ -51,7 +51,9 @@ void main() {
       await chatStorage.deleteChat(id: chat.id);
       expect(chatStorage.isChatExists(id: chat.id), false);
       expect(
-          chatStorage.isChatExists(id: chat.id, includeDeleted: true), false);
+        chatStorage.isChatExists(id: chat.id, includeDeleted: true),
+        false,
+      );
       expect(chatStorage.getChatCount(), 0);
     });
     test('sort chats', () async {

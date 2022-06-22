@@ -1,6 +1,6 @@
 {
-    "name": "Flutter Wubbachat",
-    "short_name": "Flutter Wubbachat",
+    "name": "Wubbachat",
+    "short_name": "Wubbachat",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

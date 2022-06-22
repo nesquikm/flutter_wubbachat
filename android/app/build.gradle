@@ -89,17 +89,17 @@ android {
         production {
             dimension "default"
             applicationIdSuffix ""
-            manifestPlaceholders = [appName: "Flutter Wubbachat"]
+            manifestPlaceholders = [appName: "Wubbachat"]
         }
         staging {
             dimension "default"
             applicationIdSuffix ""
-            manifestPlaceholders = [appName: "[STG] Flutter Wubbachat"]
+            manifestPlaceholders = [appName: "[STG] Wubbachat"]
         }
         development {
             dimension "default"
             applicationIdSuffix ""
-            manifestPlaceholders = [appName: "[DEV] Flutter Wubbachat"]
+            manifestPlaceholders = [appName: "[DEV] Wubbachat"]
         }
     }
 

@@ -1,4 +1,4 @@
-# Flutter Wubbachat
+# Wubbachat
 
 ![coverage][coverage_badge]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
@@ -41,7 +41,7 @@ To generate l10n:
 $ flutter gen-l10n
 ```
 
-_\*Flutter Wubbachat works on iOS, Android, Web, and Windows._
+_\*Wubbachat works on iOS, Android, Web, and Windows._
 
 ---
 
