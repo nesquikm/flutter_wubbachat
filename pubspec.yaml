@@ -1,6 +1,6 @@
 name: flutter_wubbachat
 description: A simple chat that uses Firebase Cloud Messages and Firebase Cloud Functions
-version: 1.0.0+1
+version: 1.0.0+2
 publish_to: none
 
 environment:
