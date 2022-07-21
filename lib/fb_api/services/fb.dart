@@ -13,7 +13,7 @@ class Fb {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    // TODO(nesquikm): puth this thing into config
+    // TODO(nesquikm): put this thing into config
     // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
     final messaging = FirebaseMessaging.instance;

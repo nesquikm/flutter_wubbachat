@@ -93,6 +93,7 @@ class AppView extends StatelessWidget {
         context.read<DeepRouteCubit>().clear();
       },
       child: MaterialApp.router(
+        routeInformationProvider: router.routeInformationProvider,
         routeInformationParser: router.routeInformationParser,
         routerDelegate: router.routerDelegate,
         theme: ThemeData(
